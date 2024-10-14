@@ -475,6 +475,61 @@
 <p>Пример работы:
 <img alt="" src="../images/task3_.jpg" />
 <img alt="" src="../images/task3.jpg" /></p>
+<p>Листинг кода, index.html: </p>
+<pre><code class="language-py">
+&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+&lt;head&gt;
+    &lt;meta charset=&quot;UTF-8&quot;&gt;
+    &lt;title&gt;Task 3&lt;/title&gt;
+     &lt;style&gt;
+        body {
+            padding: 100px;
+            font-family: &quot;Gill Sans&quot;, sans-serif;
+            text-align: center;
+            background-color: #D7ABFFFF;
+            color: #00032c;
+        }
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;h1&gt;Hello, world!&lt;/h1&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+
+</code></pre>
+<p>server.py:</p>
+<pre><code class="language-py">import socket
+
+
+def connect(file_loc: str = 'index.html'):
+    host = '127.0.0.1'
+    port = 8080
+
+    server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    server_socket.bind((host, port))
+    server_socket.listen(1)
+
+    print(f&quot;Server is up and running: http://localhost:{port}&quot;)
+
+    while True:
+        client_conn, client_addr = server_socket.accept()
+
+        with open(file_loc, 'r') as f:
+            content = f.read()
+
+        response = f&quot;HTTP/1.1 200 OK\nContent-Type: text/html\nContent-Length: {len(content)}\n\n{content}&quot;
+        client_conn.sendall(response.encode())
+
+        client_conn.close()
+
+
+if __name__ == &quot;__main__&quot;:
+    html_file_path = input(&quot;Введите путь к HTML файлу: &quot;)
+    connect(html_file_path)
+
+
+</code></pre>
 
 
 

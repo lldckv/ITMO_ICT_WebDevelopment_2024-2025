@@ -473,6 +473,59 @@
 <p>Пример работы:
 <img alt="" src="../images/task1_0.jpg" />
 <img alt="" src="../images/task1_1.jpg" /></p>
+<p>Листинг кода, client.py: </p>
+<pre><code class="language-py">import socket
+
+
+def connect():
+    serverIP = &quot;127.0.0.1&quot;
+    portNumber = 8080
+    bufferSize = 1024
+
+    msgFromClient = &quot;Hello, server!&quot;
+
+    UDPClientSocket = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM)
+
+    UDPClientSocket.sendto(str.encode(msgFromClient), (serverIP, portNumber))
+    msgFromServer = UDPClientSocket.recvfrom(bufferSize)
+    msg = &quot;Message from Server: {}&quot;.format(msgFromServer[0].decode())
+
+    print(msg)
+
+
+if __name__ == &quot;__main__&quot;:
+    connect()
+
+</code></pre>
+<p>server.py:</p>
+<pre><code class="language-py">import socket
+
+def connect():
+    localIP = &quot;127.0.0.1&quot;
+    localPort = 8080
+    bufferSize = 1024
+
+    msgFromServer = &quot;Hello, client!&quot;
+    bytesToSend = str.encode(msgFromServer)
+
+    UDPServerSocket = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM)
+
+    UDPServerSocket.bind((localIP, localPort))
+    print(&quot;UDP server up and listening&quot;)
+
+    while True:
+        message, address = UDPServerSocket.recvfrom(bufferSize)
+        clientMsg = &quot;Message from Client: {}&quot;.format(message.decode())
+
+        print(clientMsg)
+
+        UDPServerSocket.sendto(bytesToSend, address)
+
+
+if __name__ == &quot;__main__&quot;:
+    connect()
+
+</code></pre>
 
 
 
